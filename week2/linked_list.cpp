@@ -1,80 +1,147 @@
-void insertAtHead(T element)
+void Link::insertAtHead(T element)
 {
-
+  next = new Link(value, next);
+  value = element;
 }
 
-void insertAtTail(T element)
+void Link::insertAtTail(T element)
 {
-
+  if(next == nullptr){
+    next = new Link(element)
+  }
+  else{
+    next->insertAtTail(element);
+  }
 }
 
-void insertAt(int index, T element)
+void Link::insertAt(int index, T element)
 {
-
+    insertAt(index, element, 0);
 }
 
-void insertAt(int index, T element, int current)
+void Link::insertAt(int index, T element, int current)
 {
-
+  if(index - 1 <= current ){
+    insertAtHead(element);
+  }
+  else{
+    next->insertAt(index, element, current + 1);
+  }
 }
 
-void removeFromHead()
+void Link::removeFromHead()
 {
-
+  T* old = next;
+  value = next->value;
+  next = next->next;
+  delete old;
 }
 
-void removeFromTail()
+void Link::removeFromTail()
 {
-
+  if(next->next == nullptr){
+    delete next->next;
+    next = nullptr;
+  }
+  else{
+    next->removeFromTail(element);
+  }
 }
 
-void removeFrom(int index)
+void Link::removeFrom(int index)
 {
-
+  removeFrom(index, 0);
 }
 
-int length()
+void Link::removeFrom(int index, int current)
 {
-
+  if(index == 0){
+    removeFromHead();
+  }
+  else if(index - 1 <= current ){
+    T* old = next;
+    next = next->next;
+    delete old;
+  }
+  else{
+    next->insertAt(index, element, current + 1);
+  }
 }
 
-int length(int current)
+int Link::length()
 {
-
+  return length(0);
 }
 
-int search(T element) const
+int Link::length(int current)
 {
-
+  if(next == nullptr){
+    return current + 1;
+  }
+  else{
+    return next->length(current + 1);
+  }
 }
 
-int search(T element, int current) const
+int Link::search(T element) const
 {
-
+  search(element, 0);
 }
 
-std::vector<int> searchAll(T element) const
+int Link::search(T element, int current) const
 {
-
+  if(element == value){
+    return current;
+  }
+  if(next == nullptr){
+    return -1;
+  }
+  else{
+    return next->search(element, 0);
+  }
 }
 
-std::vector<int> searchAll(T element, int current, std::vector<int> collection) const
+std::vector<int> Link::searchAll(T element) const
 {
-
+  return searchAll(element, 0, std::vector<int> {});
 }
 
-std::vector<T> toArray() const
+std::vector<int> Link::searchAll(T element, int current, std::vector<int> collection) const
 {
-
+  if(element == value){
+    collection.push_back(current);
+  }
+  if(next == nullptr){
+    return collection;
+  }
+  else{
+    return next->searchAll(collection);
+  }
 }
 
-std::vector<T> toArray(std::vector<T> collection) const
+std::vector<T> Link::toArray() const
 {
-
+  return toArray(std::vector<int> {});
 }
 
-void append(Link *links)
-{
+std::vector<T> Link::toArray(std::vector<T> collection) const
+{  
+  collection.push_back(current);
+  if(next == nullptr){
+    return collection;
+  }
+  else{
+    return next->toArray(collection);
+  }
+}
 
+void Link::append(Link *links)
+{
+  if(next == nullptr){
+    next = links;
+  }
+  else{
+    next->append(links);
+  }
 }
 

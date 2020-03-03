@@ -1,11 +1,11 @@
 #include <vector>
-// Linked List Class
 
+// Linked List Class
 template <class T>
 class Link{
   private:
     T value; 
-    T *next; 
+    L *next; 
   public: 
     Link() {};
     Link(T element): value(element){};
@@ -17,6 +17,7 @@ class Link{
     void removeFromHead();
     void removeFromTail();
     void removeFrom(int index);
+    void removeFrom(int index, int current);
     int length();
     int length(int current);
     int search(T element) const;
