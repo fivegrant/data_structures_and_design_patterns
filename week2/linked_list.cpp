@@ -1,25 +1,31 @@
-void Link::insertAtHead(T element)
+#include "linked_list.hpp"
+
+template <class T>
+void Link<T>::insertAtHead(T element)
 {
   next = new Link(value, next);
   value = element;
 }
 
-void Link::insertAtTail(T element)
+template <class T>
+void Link<T>::insertAtTail(T element)
 {
   if(next == nullptr){
-    next = new Link(element)
+    next = new Link(element);
   }
   else{
     next->insertAtTail(element);
   }
 }
 
-void Link::insertAt(int index, T element)
+template <class T>
+void Link<T>::insertAt(int index, T element)
 {
     insertAt(index, element, 0);
 }
 
-void Link::insertAt(int index, T element, int current)
+template <class T>
+void Link<T>::insertAt(int index, T element, int current)
 {
   if(index - 1 <= current ){
     insertAtHead(element);
@@ -29,7 +35,8 @@ void Link::insertAt(int index, T element, int current)
   }
 }
 
-void Link::removeFromHead()
+template <class T>
+void Link<T>::removeFromHead()
 {
   T* old = next;
   value = next->value;
@@ -37,23 +44,26 @@ void Link::removeFromHead()
   delete old;
 }
 
-void Link::removeFromTail()
+template <class T>
+void Link<T>::removeFromTail()
 {
   if(next->next == nullptr){
     delete next->next;
     next = nullptr;
   }
   else{
-    next->removeFromTail(element);
+    next->removeFromTail();
   }
 }
 
-void Link::removeFrom(int index)
+template <class T>
+void Link<T>::removeFrom(int index)
 {
   removeFrom(index, 0);
 }
 
-void Link::removeFrom(int index, int current)
+template <class T>
+void Link<T>::removeFrom(int index, int current)
 {
   if(index == 0){
     removeFromHead();
@@ -64,16 +74,18 @@ void Link::removeFrom(int index, int current)
     delete old;
   }
   else{
-    next->insertAt(index, element, current + 1);
+    next->insertAt(index, current + 1);
   }
 }
 
-int Link::length()
+template <class T>
+int Link<T>::length()
 {
   return length(0);
 }
 
-int Link::length(int current)
+template <class T>
+int Link<T>::length(int current)
 {
   if(next == nullptr){
     return current + 1;
@@ -83,12 +95,14 @@ int Link::length(int current)
   }
 }
 
-int Link::search(T element) const
+template <class T>
+int Link<T>::search(T element) const
 {
-  search(element, 0);
+  return search(element, 0);
 }
 
-int Link::search(T element, int current) const
+template <class T>
+int Link<T>::search(T element, int current) const
 {
   if(element == value){
     return current;
@@ -101,12 +115,14 @@ int Link::search(T element, int current) const
   }
 }
 
-std::vector<int> Link::searchAll(T element) const
+template <class T>
+std::vector<int> Link<T>::searchAll(T element) const
 {
   return searchAll(element, 0, std::vector<int> {});
 }
 
-std::vector<int> Link::searchAll(T element, int current, std::vector<int> collection) const
+template <class T>
+std::vector<int> Link<T>::searchAll(T element, int current, std::vector<int> collection) const
 {
   if(element == value){
     collection.push_back(current);
@@ -119,14 +135,16 @@ std::vector<int> Link::searchAll(T element, int current, std::vector<int> collec
   }
 }
 
-std::vector<T> Link::toArray() const
+template <class T>
+std::vector<T> Link<T>::toArray() const
 {
   return toArray(std::vector<int> {});
 }
 
-std::vector<T> Link::toArray(std::vector<T> collection) const
+template <class T>
+std::vector<T> Link<T>::toArray(std::vector<T> collection) const
 {  
-  collection.push_back(current);
+  collection.push_back(value);
   if(next == nullptr){
     return collection;
   }
@@ -135,7 +153,8 @@ std::vector<T> Link::toArray(std::vector<T> collection) const
   }
 }
 
-void Link::append(Link *links)
+template <class T>
+void Link<T>::append(Link *links)
 {
   if(next == nullptr){
     next = links;
