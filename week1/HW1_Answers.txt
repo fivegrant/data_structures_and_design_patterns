@@ -1,0 +1,17 @@
+Five Grant - Data Structures and Design Patterns - Spring 2020 
+Homework 1
+
+1.
+  a. 4n + 12 -> 4n -> n ANS: O(N) - Linear
+  b. n^3 + 6 -> n^3 ANS: O(N^3) - Cubic
+  c. 120 -> O(1) - Constant
+  d. n^2 -7 -> n^2 ANS: O(N^2) - Quadratic
+  e. n^4 + 50n^2 +20 -> n^4 + 50n^2 -> n^4 -> ANS: O(N^4)
+  e. n ANS: O(N) - Linear
+
+2.
+  a. ANS: O(N)
+  b. i alone runs O(N). For each i, j runs O(N). Therefore O(N) * O(N) = O(n^2) ANS: O(n^2)
+  c. n^2 + n -> n^2 ANS: O(n^2)
+  d. n + x -> n ANS: O(N)
+  e. ANS: O(log(N))
