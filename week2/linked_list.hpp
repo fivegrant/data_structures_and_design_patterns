@@ -3,13 +3,12 @@
 // Linked List Class
 template <class T>
 class Link{
-  private:
+  public: 
     T value; 
     Link *next; 
-  public: 
     Link() {};
     Link(T element): value(element){};
-    Link(T element, T *address): value(element),next(address){};
+    Link(T element, Link *address): value(element),next(address){};
     void insertAtHead(T element);
     void insertAtTail(T element);
     void insertAt(int index, T element);
