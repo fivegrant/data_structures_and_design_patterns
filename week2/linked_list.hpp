@@ -5,7 +5,7 @@ template <class T>
 class Link{
   public: 
     T value; 
-    Link *next; 
+    Link *next = nullptr; 
     Link() {};
     Link(T element): value(element){};
     Link(T element, Link *address): value(element),next(address){};

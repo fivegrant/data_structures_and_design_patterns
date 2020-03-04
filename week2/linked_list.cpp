@@ -1,13 +1,11 @@
 #include "linked_list.hpp"
 
-template <class T>
 void Link<T>::insertAtHead(T element)
 {
   next = new Link(value, next);
   value = element;
 }
 
-template <class T>
 void Link<T>::insertAtTail(T element)
 {
   if(next == nullptr){
@@ -18,13 +16,11 @@ void Link<T>::insertAtTail(T element)
   }
 }
 
-template <class T>
 void Link<T>::insertAt(int index, T element)
 {
     insertAt(index, element, 0);
 }
 
-template <class T>
 void Link<T>::insertAt(int index, T element, int current)
 {
   if(index - 1 <= current ){
@@ -35,7 +31,6 @@ void Link<T>::insertAt(int index, T element, int current)
   }
 }
 
-template <class T>
 void Link<T>::removeFromHead()
 {
   T* old = next;
@@ -44,7 +39,6 @@ void Link<T>::removeFromHead()
   delete old;
 }
 
-template <class T>
 void Link<T>::removeFromTail()
 {
   if(next->next == nullptr){
@@ -56,13 +50,11 @@ void Link<T>::removeFromTail()
   }
 }
 
-template <class T>
 void Link<T>::removeFrom(int index)
 {
   removeFrom(index, 0);
 }
 
-template <class T>
 void Link<T>::removeFrom(int index, int current)
 {
   if(index == 0){
@@ -78,7 +70,6 @@ void Link<T>::removeFrom(int index, int current)
   }
 }
 
-template <class T>
 int Link<T>::length()
 {
   return length(0);
@@ -95,13 +86,11 @@ int Link<T>::length(int current)
   }
 }
 
-template <class T>
 int Link<T>::search(T element) const
 {
   return search(element, 0);
 }
 
-template <class T>
 int Link<T>::search(T element, int current) const
 {
   if(element == value){
@@ -115,13 +104,11 @@ int Link<T>::search(T element, int current) const
   }
 }
 
-template <class T>
 std::vector<int> Link<T>::searchAll(T element) const
 {
   return searchAll(element, 0, std::vector<int> {});
 }
 
-template <class T>
 std::vector<int> Link<T>::searchAll(T element, int current, std::vector<int> collection) const
 {
   if(element == value){
@@ -135,13 +122,11 @@ std::vector<int> Link<T>::searchAll(T element, int current, std::vector<int> col
   }
 }
 
-template <class T>
 std::vector<T> Link<T>::toArray() const
 {
   return toArray(std::vector<int> {});
 }
 
-template <class T>
 std::vector<T> Link<T>::toArray(std::vector<T> collection) const
 {  
   collection.push_back(value);
@@ -153,7 +138,6 @@ std::vector<T> Link<T>::toArray(std::vector<T> collection) const
   }
 }
 
-template <class T>
 void Link<T>::append(Link *links)
 {
   if(next == nullptr){
