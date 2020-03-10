@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch2.hpp"
 #include <string>
-#include "double_linked.hpp"
+#include "doubley_linked_list.hpp"
 
 TEST_CASE("Initialize Linked List"){
    Link<std::string> first_node = Link<std::string>("Hello");

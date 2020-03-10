@@ -38,16 +38,19 @@ class Link{
         }
       };   
 
-    void insertAt(int index, T element){
-      insertAt(index, element, 0);
+    void insertAtIndex(int index, T element){
+      insertAtIndex(index, element, 0);
       };
 
-    void insertAt(int index, T element, int current){
-      if(index - 1 <= current ){
+    void insertAtIndex(int index, T element, int current){
+      if(index == 0){
         insertAtHead(element);
+      }
+      else if(index - 1 <= current ){
+	next = new Link(element, next);
         }
       else{
-        next->insertAt(index, element, current + 1);
+        next->insertAtIndex(index, element, current + 1);
         }
       };
 
@@ -68,11 +71,11 @@ class Link{
         }
       };
 
-    void removeFrom(int index){
-      removeFrom(index, 0);
+    void removeFromIndex(int index){
+      removeFromIndex(index, 0);
       };
 
-    void removeFrom(int index, int current){
+    void removeFromIndex(int index, int current){
       if(index == 0){
         removeFromHead();
        }
@@ -82,20 +85,20 @@ class Link{
         delete old;
         }
       else{
-        next->removeFrom(index, current + 1);
+        next->removeFromIndex(index, current + 1);
         }
       };
 
-     int length(){
-       return length(0);
+     int getLength(){
+       return getLength(0);
        };
 
-    int length(int current){
+    int getLength(int current){
       if(next == nullptr){
         return current + 1;
         }
       else{
-        return next->length(current + 1);
+        return next->getLength(current + 1);
         }
       };
 
@@ -145,12 +148,12 @@ class Link{
         }
       };
 
-    void append(Link *links){
+    void appendList(Link *links){
       if(next == nullptr){
         next = links;
         }
       else{
-        next->append(links);
+        next->appendList(links);
         }
       };
 };
