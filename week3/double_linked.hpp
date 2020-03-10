@@ -13,44 +13,57 @@ class Link{
     Link(T element, Link *nextAddress): value(element), next(nextAddress){};
     Link(T element, Link *nextAddress, Link *previousAddress): value(element), next(nextAddress), prev(previousAddress){};
 
-    T getFirstElement(){
+    T firstElement(){
       return value;
     };
 
-    T getLastElement(){
+    T lastElement(){
       return prev->value;
     };
 
     void insertAtHead(T element){
       next = new Link(value, next, this);
       value = element;
+      if(prev == nullptr){
+        prev = next;
+        }
       };
 
     void insertAtTail(T element){
       insertAtTail(element, nullptr, this);
       };   
 
-    void insertAtTail(T element, Link *previousAddress, Link *firstElement){
+    void insertAtTail(T element, Link *previousAddress, Link *headElement){
       if(next == nullptr){
-        next = new Link(element);
-	next->prev = previousAddress;
-	firstElement->prev = this;
+        next = new Link(element, nullptr, this);
+	headElement->prev = next;
         }
       else{
-        next->insertAtTail(element, this, firstElement);
+        next->insertAtTail(element, this, headElement);
         }
       };   
 
     void insertAtIndex(int index, T element){
-      insertAtIndex(index, element, nullptr, 0);
-      };
-
-    void insertAtIndex(int index, T element, Link *previousAddress, int current){
-      if(index - 1 <= current){
-        insertAtHead(element);
+      if(index == getLength()){
+        insertAtTail(element);
         }
       else{
-        next->insertAtIndex(index, element, this, current + 1);
+        insertAtIndex(index, element, nullptr, this, 0);
+	}
+      };
+
+    void insertAtIndex(int index, T element, Link *previousAddress, 
+     Link *firstAddress, int current){
+      if(index == 0){
+        insertAtHead(element);
+      }
+      else if(index - 1 <= current){
+        Link *space = next;
+	next = new Link(element, next, this);
+	space->prev = next;
+        }
+      else{
+        next->insertAtIndex(index, element, this, firstAddress, current + 1);
         }
       };
 
@@ -150,20 +163,17 @@ class Link{
       };
 
     void appendList(Link *links){ 
-      if(next == nullptr){ 
-        next = links;
-        }
-      else{
-        next->appendList(links);
-        }
+      return appendList(links, this);
       };
 
-    void appendList(Link *links, Link *firstElment){ 
+    void appendList(Link *links, Link *headElement){ 
       if(next == nullptr){ 
         next = links;
+	headElement->prev = next->prev;
+	next->prev = this;
         }
       else{
-        next->appendList(links);
+        next->appendList(links, headElement);
         }
       };
 };

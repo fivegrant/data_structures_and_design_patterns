@@ -1,3 +1,4 @@
+#include <string>
 #include <vector>
 
 // Linked List Class
@@ -9,21 +10,147 @@ class Link{
     Link() {};
     Link(T element): value(element){};
     Link(T element, Link *address): value(element),next(address){};
-    void insertAtHead(T element);
-    void insertAtTail(T element);
-    void insertAt(int index, T element);
-    void insertAt(int index, T element, int current);
-    void removeFromHead();
-    void removeFromTail();
-    void removeFrom(int index);
-    void removeFrom(int index, int current);
-    int length();
-    int length(int current);
-    int search(T element) const;
-    int search(T element, int current) const;
-    std::vector<int> searchAll(T element) const;
-    std::vector<int> searchAll(T element, int current, std::vector<int> collection) const;
-    std::vector<T> toArray() const;
-    std::vector<T> toArray(std::vector<T> collection) const;
-    void append(Link *links);
+
+    T firstElement(){
+       return value;
+      }
+
+    T lastElement(){
+      if(next == nullptr){
+        return value;
+        }
+      else{
+        return next->lastElement();
+        }
+      }
+
+    void insertAtHead(T element){
+      next = new Link(value, next);
+      value = element;
+      };
+
+    void insertAtTail(T element){
+      if(next == nullptr){
+        next = new Link(element);
+        }
+      else{
+      next->insertAtTail(element);
+        }
+      };   
+
+    void insertAt(int index, T element){
+      insertAt(index, element, 0);
+      };
+
+    void insertAt(int index, T element, int current){
+      if(index - 1 <= current ){
+        insertAtHead(element);
+        }
+      else{
+        next->insertAt(index, element, current + 1);
+        }
+      };
+
+    void removeFromHead(){
+      Link* old = next;
+      value = next->value;
+      next = next->next;
+      delete old;
+      };
+
+    void removeFromTail(){
+      if(next->next == nullptr){
+        delete next->next;
+        next = nullptr;
+        }
+      else{
+        next->removeFromTail();
+        }
+      };
+
+    void removeFrom(int index){
+      removeFrom(index, 0);
+      };
+
+    void removeFrom(int index, int current){
+      if(index == 0){
+        removeFromHead();
+       }
+      else if(index - 1 <= current ){
+        Link* old = next;
+        next = next->next;
+        delete old;
+        }
+      else{
+        next->removeFrom(index, current + 1);
+        }
+      };
+
+     int length(){
+       return length(0);
+       };
+
+    int length(int current){
+      if(next == nullptr){
+        return current + 1;
+        }
+      else{
+        return next->length(current + 1);
+        }
+      };
+
+    int search(T element) const{
+      return search(element, 0);
+      };
+
+    int search(T element, int current) const{
+      if(element == value){
+        return current;
+        }
+      if(next == nullptr){
+        return -1;
+        }
+      else{
+        return next->search(element, current + 1);
+        }
+      };
+
+    std::vector<int> searchAll(T element) const{
+      return searchAll(element, 0, std::vector<int> {});
+      };
+
+    std::vector<int> searchAll(T element, int current, std::vector<int> collection) const{
+      if(element == value){
+        collection.push_back(current);
+        }
+      if(next == nullptr){
+        return collection;
+        }
+      else{
+        return next->searchAll(element, current + 1, collection);
+        }
+      };
+
+    std::vector<T> toArray() const{
+      return toArray(std::vector<T> {});
+      };
+
+    std::vector<T> toArray(std::vector<T> collection) const{  
+      collection.push_back(value);
+      if(next == nullptr){
+        return collection;
+        }
+      else{
+        return next->toArray(collection);
+        }
+      };
+
+    void append(Link *links){
+      if(next == nullptr){
+        next = links;
+        }
+      else{
+        next->append(links);
+        }
+      };
 };

@@ -1,12 +1,13 @@
 #define CATCH_CONFIG_MAIN
-#include "catch2.hpp"
+#include "../catch2.hpp"
 #include <string>
-#include "linked_list_fixed.hpp"
+#include "linked_list.hpp"
 
 TEST_CASE("Initialize Linked List"){
    Link<std::string> first_node = Link<std::string>("Hello");
    REQUIRE(first_node.value == "Hello");
    REQUIRE(first_node.next == nullptr);
+   REQUIRE(first_node.value == first_node.firstElement());
 
    Link<std::string> two_node = Link<std::string>("again", &first_node);
    REQUIRE(two_node.value == "again");
@@ -28,6 +29,7 @@ TEST_CASE("Insert into Linked List"){
    linked.append(&linked2);
    std::vector<std::string> comp2 = {"Second","Fifth","First","Third", "Fourth", "Extra", "Stuff"};
    REQUIRE(comp2 == linked.toArray());
+   REQUIRE(linked2.lastElement() == "Stuff");
 }
 
 TEST_CASE("Remove Elements"){
@@ -58,6 +60,3 @@ TEST_CASE("Search Stuff"){
    REQUIRE(linked.search("First") == 2);
    REQUIRE(linked.searchAll("Third") == std::vector<int> {3, 4});
 }
-
- 
-
