@@ -9,7 +9,7 @@ class Link{
     Link *next = nullptr; 
     bool empty = true;
     Link() {};
-    Link(T element): value(element){};
+    Link(T element): value(element), empty(false){};
     Link(T element, Link *address): value(element),next(address), empty(false){};
 
     T firstElement(){
