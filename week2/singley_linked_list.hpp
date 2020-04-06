@@ -7,13 +7,14 @@ class Link{
   public: 
     T value; 
     Link *next = nullptr; 
+    bool empty = true;
     Link() {};
     Link(T element): value(element){};
-    Link(T element, Link *address): value(element),next(address){};
+    Link(T element, Link *address): value(element),next(address), empty(false){};
 
     T firstElement(){
        return value;
-      }
+       }
 
     T lastElement(){
       if(next == nullptr){
@@ -25,16 +26,28 @@ class Link{
       }
 
     void insertAtHead(T element){
-      next = new Link(value, next);
-      value = element;
+      if(not empty){
+      	next = new Link(value, next);
+      	value = element;
+      }
+      else{
+        value = element;
+	empty = false;
+        }
       };
 
     void insertAtTail(T element){
-      if(next == nullptr){
-        next = new Link(element);
+      if(not empty){
+        if(next == nullptr){
+          next = new Link(element);
+          }
+        else{
+          next->insertAtTail(element);
+          }
         }
       else{
-      next->insertAtTail(element);
+        value = element;
+	empty = false;
         }
       };   
 
@@ -55,24 +68,39 @@ class Link{
       };
 
     void removeFromHead(){
-      Link* old = next;
-      value = next->value;
-      next = next->next;
-      delete old;
+      if(getLength() <= 1){
+        empty = true;
+        }
+      else{
+        Link* old = next;
+        value = next->value;
+        next = next->next;
+        delete old;
+        }
       };
 
     void removeFromTail(){
-      if(next->next == nullptr){
-        delete next->next;
-        next = nullptr;
+      if(getLength() <= 1){
+        empty = true;
         }
       else{
-        next->removeFromTail();
-        }
+      	if(next->next == nullptr){
+          delete next->next;
+          next = nullptr;
+          }
+        else{
+          next->removeFromTail();
+          }
+      	}
       };
 
     void removeFromIndex(int index){
-      removeFromIndex(index, 0);
+      if(getLength() <= 1){
+        empty = true;
+        }
+      else{
+      	removeFromIndex(index, 0);
+        }
       };
 
     void removeFromIndex(int index, int current){
@@ -90,7 +118,12 @@ class Link{
       };
 
      int getLength(){
-       return getLength(0);
+       if(empty){
+         return 0;
+       }
+       else{
+         return getLength(0);
+	 }
        };
 
     int getLength(int current){
@@ -135,7 +168,12 @@ class Link{
       };
 
     std::vector<T> toArray() const{
-      return toArray(std::vector<T> {});
+      if(empty){
+        return std::vector<T> {};
+        }
+      else{
+        return toArray(std::vector<T> {});
+        }
       };
 
     std::vector<T> toArray(std::vector<T> collection) const{  
@@ -149,7 +187,12 @@ class Link{
       };
 
     void appendList(Link *links){
-      if(next == nullptr){
+      if(empty){
+        value = next->value;
+        next = next->next;
+	empty = false;
+      }
+      else if(next == nullptr){
         next = links;
         }
       else{
