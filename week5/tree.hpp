@@ -17,10 +17,10 @@ class BinarySearchTree{
 	BinarySearchTree(T element): value(element), empty(false){} 
 	//builds tree from sorted array of ints
 	BinarySearchTree( const std::vector<T>& vals) {
-	  sort(vals.begin(), vals.end())
-	  for(i = vals.size()/2; i <= 0 ;i--){
-	    insert(collection[i]);
-	    insert(collection[vals.size() - 1 - i]);
+	  sort(vals.begin(), vals.end());
+	  for(int i = vals.size()/2; i <= 0 ;i--){
+	    insert(vals[i]);
+	    insert(vals[vals.size() - 1 - i]);
 	  }
 	  if(vals.size() > 0){
 	    empty = false;
@@ -61,7 +61,7 @@ class BinarySearchTree{
 	  else{
 	    bool left_balance  = left  == nullptr ? false : left->isBalanced(); 
 	    bool right_balance = right == nullptr ? false : right->isBalanced(); 
-	    return left_height == right_height;
+	    return left_balance == right_balance;
 	  }
 	}
 
@@ -70,9 +70,9 @@ class BinarySearchTree{
 	    return {};
 	  }
 	  else{
-	    std::vector<T> collection  = left  == nullptr ? {} : left->elementVector();
+	    std::vector<T> collection  = left  == nullptr ? std::vector<T>{} : left->elementVector();
 	    collection.insert(value);
-	    std::vector<T> right_elements = right == nullptr ? {} : right->elementVector();
+	    std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->elementVector();
 	    collection.insert(collection.end(), right_elements.begin(), right_elements.end());
 	    return collection;
 	  }
@@ -85,7 +85,7 @@ class BinarySearchTree{
 	    empty = false;
 	  }
 	  else if(value == element){
-	    return
+	    return;
 	  }
 	  else if(element < value){
 	    if(left != nullptr){
@@ -110,11 +110,11 @@ class BinarySearchTree{
 	  if (find == value){
 	    return true;
 	  }
-	  else if(find < value){
-	    return left->contains();
+	  else if(find < value and left != nullptr){
+	    return left->contains(find);
 	  }
-	  else if(find > value){
-	    return right->contains();
+	  else if(find > value and left != nullptr){
+	    return right->contains(find);
 	  }
 	  else{
 	    return false;
@@ -127,10 +127,10 @@ class BinarySearchTree{
 	    return value;
 	  }
 	  else if(find < value){
-	    return left->search();
+	    return left->search(find);
 	  }
 	  else if(find > value){
-	    return right->search();
+	    return right->search(find);
 	  }
 	    //potential for no return
 	}
@@ -148,27 +148,14 @@ class BinarySearchTree{
 	    if(right != nullptr){
 	      collection.insert(right->value);
 	    }
-	    std::vector<T> left_elements  = left  == nullptr ? {} : left->makeBreadFirstVector();
-	    std::vector<T> right_elements = right == nullptr ? {} : right->makeBreadFirstVector();
+	    std::vector<T> left_elements  = left  == nullptr ? std::vector<T>{} : left->makeBreadFirstVector();
+	    std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->makeBreadFirstVector();
 	    left_elements.insert(left_elements.end(), right_elements.begin(), right_elements.end());
 	    return collection;
 	  }
 
 	}
 
-	void delete( const T& kill ){
-	  if(kill == value){
-	    delete this;
-	  }
-	  else{
-	    if(left != nullptr){
-	      left->delete(kill);
-	    }
-	    if(right != nullptr){
-	      right->delete(kill)
-	    }
-	  }
-	}
 };
 
 #endif
