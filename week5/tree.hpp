@@ -17,10 +17,8 @@ class BinarySearchTree{
 	BinarySearchTree(T element): value(element), empty(false){} 
 	//builds tree from sorted array of ints
 	BinarySearchTree( const std::vector<T>& vals) {
-	  sort(vals.begin(), vals.end());
-	  for(int i = vals.size()/2; i <= 0 ;i--){
-	    insert(vals[i]);
-	    insert(vals[vals.size() - 1 - i]);
+	  for(auto element : vals){
+	    insert(element);
 	  }
 	  if(vals.size() > 0){
 	    empty = false;
@@ -28,7 +26,7 @@ class BinarySearchTree{
 	}
 
 	int getHeight() const{
-	  if(isEmpty){
+	  if(isEmpty()){
 	    return 0;
 	  }
 	  else{
@@ -71,7 +69,7 @@ class BinarySearchTree{
 	  }
 	  else{
 	    std::vector<T> collection  = left  == nullptr ? std::vector<T>{} : left->elementVector();
-	    collection.insert(value);
+	    collection.push_back(value);
 	    std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->elementVector();
 	    collection.insert(collection.end(), right_elements.begin(), right_elements.end());
 	    return collection;
@@ -94,9 +92,8 @@ class BinarySearchTree{
 	    else{
 	      left = new BinarySearchTree(element);
 	    }
-
 	  }
-	  else{
+	  else if(element > value){
 	    if(right != nullptr){
 	      right->insert(element);
 	    }
@@ -143,16 +140,33 @@ class BinarySearchTree{
 	  else{
 	    std::vector<T> collection = {value};
 	    if(left != nullptr){
-	      collection.insert(left->value);
+	      collection.push_back(left->value);
 	    }
 	    if(right != nullptr){
-	      collection.insert(right->value);
+	      collection.push_back(right->value);
 	    }
-	    std::vector<T> left_elements  = left  == nullptr ? std::vector<T>{} : left->makeBreadFirstVector();
-	    std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->makeBreadFirstVector();
+	    std::vector<T> left_elements  = left  == nullptr ? std::vector<T>{} : left->getBreadthFirstVector();
+	    std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->getBreadthFirstVector();
 	    left_elements.insert(left_elements.end(), right_elements.begin(), right_elements.end());
+	    collection.insert(collection.end(), left_elements.begin(), left_elements.end());
 	    return collection;
 	  }
+
+	}
+
+	std::vector<T> getBreadthFirstVector() const{
+    	  std::vector<T> collection = {};
+    	  if(left != nullptr){
+      	    collection.push_back(left->value);
+    	  }
+    	  if(right != nullptr){
+	    collection.push_back(right->value);
+    	  }
+    	  std::vector<T> left_elements  = left  == nullptr ? std::vector<T>{} : left->getBreadthFirstVector();
+    	  std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->getBreadthFirstVector();
+    	  left_elements.insert(left_elements.end(), right_elements.begin(), right_elements.end());
+    	  collection.insert(collection.end(), left_elements.begin(), left_elements.end());
+    	  return collection;
 
 	}
 
