@@ -100,15 +100,19 @@ EncodedString HuffmanTree::encode( const std::string message )
 std::string HuffmanTree::decode( const EncodedString& encodedMessage )
 {
     std::string construct = "";
-    HuffmanTree* node = encodedMessage.tree;
+    HuffmanTree* top = new HuffmanTree(encodedMessage.tree->occurrences, '-');
+    top->left = encodedMessage.tree->left;
+    top->right = encodedMessage.tree->right;
+    HuffmanTree* node = top;
     for(char character: encodedMessage.message){
       node = character == '0' ? node->left : node->right;
       if(node->character != '-'){
         construct += character;
-        HuffmanTree* node = encodedMessage.tree;
+        HuffmanTree* node = top;
       }
 
     }
+    delete top;
     return construct;
 }
 
