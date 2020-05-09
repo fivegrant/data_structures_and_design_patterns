@@ -1,3 +1,4 @@
+#include "./queue.hpp"
 #include <cstdlib>
 
 class Logger{
@@ -63,20 +64,18 @@ int* bubble_sort(int* source, int size){
   return log.results();
 };
 
-int* merge_sort(int* source, int size){
-  Logger log = Logger();
+int* merge_sort(int* source, int size, Logger *log = new Logger(), int start = 0, int finish = 0){
+  Queue<int> left_queue = Queue<int>();
+  Queue<int> right_queue = Queue<int>();
   if(size > 1){
-    for(int i = 2; i < size/2; i = i*2){
+    for(int i = 1; i < size/2; i *= 2){
+      for(int j = 0; j < size - 1; j += i){
 
+      }
     }
   }
-  return log.results();
+  return log->results();
 };
-
-int* merge(int* source, int size){
-
-
-}
 
 int* quick_sort(int* source, int size){
   Logger log = Logger();
@@ -87,8 +86,7 @@ int* quick_sort(int* source, int size){
     if(source[left] > source[right]){
       log.save(source[left]);
       source[left] = source[right];
-      source[right] = log.reveal()
-
+      source[right] = log.reveal();
     }
   }
   
