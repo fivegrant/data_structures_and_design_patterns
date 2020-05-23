@@ -1,5 +1,6 @@
 #include "./queue.hpp"
 #include <cstdlib>
+#include <iostream>
 
 class Logger{
   protected:
@@ -15,7 +16,7 @@ class Logger{
     }
 
     void save(int incoming){
-      value = value;
+      value = incoming;
       update_count += 1;
     }
 
@@ -51,7 +52,7 @@ int* bubble_sort(int* source, int size){
   bool swapped = true;
   while(swapped){
     swapped = false;
-    for(int i = 0; i < size; i++){
+    for(int i = 0; i < size-1; i++){
       log.count_comparison();
       if(source[i] > source[i+1]){
         swapped = true;
@@ -64,31 +65,105 @@ int* bubble_sort(int* source, int size){
   return log.results();
 };
 
-int* merge_sort(int* source, int size, Logger *log = new Logger(), int start = 0, int finish = 0){
-  Queue<int> left_queue = Queue<int>();
-  Queue<int> right_queue = Queue<int>();
-  if(size > 1){
-    for(int i = 1; i < size/2; i *= 2){
-      for(int j = 0; j < size - 1; j += i){
+int* merge_sort(int* source, int size, Logger *log = new Logger(), int start = 0){
+  int finish = start + size;
+  if(size == 2){
+    log->count_comparison();
+    if(source[start] > source[start+1]){
+	log->save(source[start]);
+	source[start] = source[start+1];
+	source[start+1]= log->reveal();
+      }
+  }
+  else if(size > 1){
+    int middle = size/2;
+    std::cout << size << "-LEFT\n";
+    merge_sort(source, middle, log, start);
+    std::cout << size << "-RIGHT\n";
+    merge_sort(source, size - middle, log, middle);
 
+    Queue<int> left_queue = Queue<int>();
+    Queue<int> right_queue = Queue<int>();
+
+    for(int i = start; i < finish; i++){
+      if(middle > i){
+        left_queue.enqueue(source[i]);
+      }
+      else{
+        right_queue.enqueue(source[i]);
+      }
+      log->save(0);
+    }
+    for(int i = start; i < finish; i++){
+      log->count_comparison();
+      if(right_queue.isEmpty()){
+        source[i] = left_queue.dequeue();
+      }
+      else if (left_queue.isEmpty()){
+        source[i] = right_queue.dequeue();
+      }
+      else if(left_queue.front() > right_queue.front()){
+        std::cout << left_queue.front() << " > " << right_queue.front()<<"\n";
+        source[i] = right_queue.dequeue();
+      }
+      else{
+        std::cout << left_queue.front() << " < " << right_queue.front()<<"\n";
+        source[i] = left_queue.dequeue();
       }
     }
   }
   return log->results();
 };
 
-int* quick_sort(int* source, int size){
-  Logger log = Logger();
-  bool full_pass = false;
-  int left = 0; int right = size - 1;
-  while(not full_pass){
-    log.count_comparison();
-    if(source[left] > source[right]){
-      log.save(source[left]);
-      source[left] = source[right];
-      source[right] = log.reveal();
-    }
+int* quick_sort(int* source, int size, Logger *log = new Logger(), int start = 0){
+  int finish = start + size;
+  if(size == 2){
+    log->count_comparison();
+    if(source[start] > source[start+1]){
+	log->save(source[start]);
+	source[start] = source[start+1];
+	source[start+1]= log->reveal();
+      }
   }
-  
-  return log.results();
+  else if(size > 1){
+    int middle = size/2;
+    quick_sort(source, middle, log, start);
+    quick_sort(source, size - middle, log, middle);
+
+    Queue<int> left_queue = Queue<int>();
+    Queue<int> right_queue = Queue<int>();
+
+    int middle_value;
+    for(int i = start; i < finish; i++){
+      if(middle > i){
+        left_queue.enqueue(source[i]);
+      }
+      else if(middle == i){
+        middle_value = source[i];
+      }
+      else{
+        right_queue.enqueue(source[i]);
+      }
+      log->save(0);
+    }
+    bool write_middle = false;
+    for(int i = start; i < finish; i++){
+      log->count_comparison();
+      if(write_middle){
+        write_middle = false;
+	source[i] = middle_value;
+      }
+      else if (left_queue.isEmpty()){
+        source[i] = right_queue.dequeue();
+      }
+      else{
+        source[i] = left_queue.dequeue();
+	write_middle = left_queue.isEmpty();
+      }
+    }
+    quick_sort(source, middle, log, start);
+    quick_sort(source, size - middle, log, middle);
+  }
+  return log->results();
 };
+

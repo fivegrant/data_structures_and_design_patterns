@@ -7,6 +7,7 @@
 //
 
 #include "HuffmanTree.hpp"
+#include <iostream>
 
 std::map<int, std::deque<char>> getCounts(std::string data)
 {
@@ -104,8 +105,10 @@ std::string HuffmanTree::decode( const EncodedString& encodedMessage )
     top->left = encodedMessage.tree->left;
     top->right = encodedMessage.tree->right;
     HuffmanTree* node = top;
-    for(char character: encodedMessage.message){
+    for(auto character: encodedMessage.message){
       node = character == '0' ? node->left : node->right;
+      std::cout << "yay\n";
+      std::cout << character << "\n";
       if(node->character != '-'){
         construct += character;
         HuffmanTree* node = top;

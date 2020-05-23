@@ -24,7 +24,15 @@ class Queue{
   };
 
   T dequeue(){
-    return content->pop();
+    if(content->getNext() == nullptr){
+      T value = content->getValue();
+      delete content;
+      content = nullptr;
+      return value;
+    }
+    else{
+      return content->pop();
+    }
   };
 
   int size() const{
