@@ -1,38 +1,62 @@
 #ifndef GRAPH
 #define GRAPH
+#include <vector>
 
-class WeightedGraph{
-  private:
+class Graph{
+  protected:
+    // The Graph is implemented with a table
     int size;
-    int* matrix
+    double* matrix;
 
   public:
     Graph(int amount): size(amount){
-      matrix = new int[size*size] {0};
+        matrix = new double[size*size] {-1};
+    };
+
+    int* findIndices(int first, int second){
+    	return new int[2]{first*size+second, second*size+first};
     };
 
     void addEdge(int first, int second, double weight){
+    	int [2] indices = findIndices(first, second);
+	matrix[indices[0]] = weight;
+	matrix[indices[1]] = weight;
     	return;
     };
 
     void removeEdge(int first, int second){
-	return;
+    	addEdge(first, second, -1);
     };
 
     std::vector<int> neighborsOfVertex(int node){
-    	return {};
+	std::vector<int> neighbors = {};
+    	for(int i = 0; i < size; i++){
+	  int [2] indices = findIndices(node, i);
+	  if matrix[indices[0]] > 0:
+	    neighbors.push_back(i);
+	}
+    	return neighbors;
     };
 
     bool verticesAreAdjacent(int first, int second){
-	return true;
+    	int [2] indices = findIndices(first, second);
+	return matrix[indices[0]] >= 0;
     };
 
     std::vector<int> shortestPathFromVertex(int to, int from){
-    	return {};
+    	return std::vector<int>{};
     };
 
     bool hasCycle(){
-    	return true
+	for(int i = 0; i < size; i++){
+	  for(int j = 0; j < size; j++){
+	    if i == j:
+	    	continue
+	    else:
+	    	
+
+	}
+    	return false;
     };
 };
 
