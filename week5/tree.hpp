@@ -3,27 +3,28 @@
 
 #include <vector>
 #include <algorithm>
+#include "queue.hpp"
 
 template <class T>
 class BinarySearchTree{
-  private: 
-    T value; 
-    BinarySearchTree *left = nullptr;
-    BinarySearchTree *right = nullptr;
-    bool empty = true;
-
   public: 
-	BinarySearchTree(){} // makes an empty one
+        T value; 
+        BinarySearchTree *left = nullptr;
+        BinarySearchTree *right = nullptr;
+        bool empty = true;
+
+
+	BinarySearchTree(){}; // makes an empty one
 	BinarySearchTree(T element): value(element), empty(false){} 
 	//builds tree from sorted array of ints
-	BinarySearchTree( const std::vector<T>& vals) {
+	BinarySearchTree(const std::vector<T>& vals) {
 	  for(auto element : vals){
 	    insert(element);
 	  }
 	  if(vals.size() > 0){
 	    empty = false;
 	  }
-	}
+	};
 
 	int getHeight() const{
 	  if(isEmpty()){
@@ -34,11 +35,11 @@ class BinarySearchTree{
 	    int right_height = right == nullptr ? 0 : right->getHeight(); 
 	    return std::max(left_height, right_height) + 1;
 	  }
-	}
+	};
 
 	bool isEmpty() const{
 	  return empty;
-	}
+	};
 
 	int getSize() const{
 	  if(isEmpty()){
@@ -50,7 +51,7 @@ class BinarySearchTree{
 	    return left_height + right_height + 1;
   
 	  }
-	}
+	};
 
 	bool isBalanced() const{
 	  if(isEmpty()){
@@ -61,7 +62,7 @@ class BinarySearchTree{
 	    bool right_balance = right == nullptr ? false : right->isBalanced(); 
 	    return left_balance == right_balance;
 	  }
-	}
+	};
 
 	std::vector<T> elementVector() const{
 	  if(isEmpty()){
@@ -75,7 +76,7 @@ class BinarySearchTree{
 	    return collection;
 	  }
 
-	}
+	};
 
 	void insert( const T& element){
 	  if(isEmpty()){
@@ -101,7 +102,7 @@ class BinarySearchTree{
 	      right = new BinarySearchTree(element);
 	  }
 	  }
-	}
+	};
 
 	bool contains( const T& find ) const{
 	  if (find == value){
@@ -117,7 +118,7 @@ class BinarySearchTree{
 	    return false;
 	  }
 
-	}
+	};
 
 	T search( const T& find ) const{
 	  if (find == value){
@@ -130,45 +131,28 @@ class BinarySearchTree{
 	    return right->search(find);
 	  }
 	    //potential for no return
-	}
+	};
 
 
-	std::vector<T> makeBreadthFirstVector() const{
+	std::vector<T> makeBreadthFirstVector() {
 	  if(isEmpty()){
 	    return {};
 	  }
-	  else{
-	    std::vector<T> collection = {value};
-	    if(left != nullptr){
-	      collection.push_back(left->value);
+	  std::vector<T> content = {};
+	  Queue<BinarySearchTree<T>*> queue = Queue<BinarySearchTree<T>*>();
+	  queue.enqueue(this);
+	  while(not queue.isEmpty()){
+	    BinarySearchTree<T>* current = queue.dequeue();
+	    if(current->left != nullptr){
+	      queue.enqueue(current->left);
 	    }
-	    if(right != nullptr){
-	      collection.push_back(right->value);
+	    if(current->right != nullptr){
+	      queue.enqueue(current->right);
 	    }
-	    std::vector<T> left_elements  = left  == nullptr ? std::vector<T>{} : left->getBreadthFirstVector();
-	    std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->getBreadthFirstVector();
-	    left_elements.insert(left_elements.end(), right_elements.begin(), right_elements.end());
-	    collection.insert(collection.end(), left_elements.begin(), left_elements.end());
-	    return collection;
+	    content.push_back(current->value);
 	  }
-
-	}
-
-	std::vector<T> getBreadthFirstVector() const{
-    	  std::vector<T> collection = {};
-    	  if(left != nullptr){
-      	    collection.push_back(left->value);
-    	  }
-    	  if(right != nullptr){
-	    collection.push_back(right->value);
-    	  }
-    	  std::vector<T> left_elements  = left  == nullptr ? std::vector<T>{} : left->getBreadthFirstVector();
-    	  std::vector<T> right_elements = right == nullptr ? std::vector<T>{} : right->getBreadthFirstVector();
-    	  left_elements.insert(left_elements.end(), right_elements.begin(), right_elements.end());
-    	  collection.insert(collection.end(), left_elements.begin(), left_elements.end());
-    	  return collection;
-
-	}
+	  return content;
+	};
 
 };
 

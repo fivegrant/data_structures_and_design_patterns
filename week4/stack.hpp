@@ -50,7 +50,7 @@ class Stack{
     } 
     else{
       for(int i = 0; i < size(); i++){
-        content->pop();
+        pop();
       }
       Node<T>* old = content;
       content = nullptr;
