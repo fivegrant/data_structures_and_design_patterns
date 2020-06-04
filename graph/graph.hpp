@@ -14,12 +14,41 @@ class Graph{
 
   public:
     Graph(int amount): size(amount){
-        matrix = new double[size*size] {-1};
-	dijkstra = new double[size*3] {MAX_DISTANCE};
+        matrix = new double[size*size] {};
+	for(int i = 0; i < size; i++){
+	  for(int j = 0; j < size; j++){
+	    matrix[findIndex(i,j)] = -1;
+	  }
+	}
+	dijkstra = new double[size*3] {};
 	  //size*0 + i, access node visit
 	  //size*1 + i, access node shortest distance
 	  //size*2 + i, access node previous
+	for(int c = 0; c < 3; c++){
+	  for(int i = 0; i < size; i++){
+	    dijkstra[size*c+i] = MAX_DISTANCE;
+	  }
+	}
 	clean();
+    };
+
+    void spit() {
+    	for(int i = 0; i < size; i++){
+    	  for(int j = 0; j < size; j++){
+    	    std::cout << matrix[findIndex(i,j)] << " ";
+	  }
+    	  std::cout << "\n";
+	}
+
+    	  std::cout << "\n";
+    	  std::cout << "\n";
+    	  std::cout << "\n";
+    	for(int i = 0; i < 3; i++){
+    	  for(int j = 0; j < size; j++){
+    	    std::cout << dijkstra[size*i + j] << " ";
+	  }
+    	  std::cout << "\n";
+	}
     };
 
     // Accessing components of the matrix
@@ -89,11 +118,7 @@ class Graph{
     	return content;
     };
 
-    bool hasCycle(int node = 0, bool clean_up = true){
-    	if(clean_up){
-	  clean();
-	}
-	
+    bool searchCycle(int node = 0){
 	dijkstra[node] = 1;
 	dijkstra[size*2+node] = 1;
 
@@ -101,19 +126,32 @@ class Graph{
 	  if(node == i){
 	    continue;
 	  }
-	  if(dijkstra[i] == -1 and verticesAreAdjacent(node, i)){
+	  else if(dijkstra[i] == -1 and verticesAreAdjacent(node, i)){
 	    dijkstra[i] = 1;
-	    if(hasCycle(i, false)){
+	    if(searchCycle(i)){
 	      return true;
 	    }
 	  }
 	  else{
-	    if(dijkstra[size*2 + i] == 1){
+	    if(dijkstra[size*2 + i] == 1 and verticesAreAdjacent(node, i)){
 	      return true;
 	    }
 	    else{
 	      continue;
 	    }
+	  }
+	}
+	return false;
+    };
+
+
+
+    bool hasCycle(){
+	clean();
+	for(int i = 0; i < size; i++){
+	  if(searchCycle(i)){
+	    return true;
+
 	  }
 	}
 	return false;
