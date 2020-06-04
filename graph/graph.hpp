@@ -1,9 +1,9 @@
 #ifndef GRAPH
 #define GRAPH
 #include <vector>
-#include<iostream>
 
 const int MAX_DISTANCE = 999999999;
+const int DIJKSTRA_CONTENT [3] = { 0, MAX_DISTANCE, -1};
 
 class Graph{
   protected:
@@ -24,33 +24,9 @@ class Graph{
 	  //size*0 + i, access node visit
 	  //size*1 + i, access node shortest distance
 	  //size*2 + i, access node previous
-	for(int c = 0; c < 3; c++){
-	  for(int i = 0; i < size; i++){
-	    dijkstra[size*c+i] = MAX_DISTANCE;
-	  }
-	}
 	clean();
     };
-
-    void spit() {
-    	for(int i = 0; i < size; i++){
-    	  for(int j = 0; j < size; j++){
-    	    std::cout << matrix[findIndex(i,j)] << " ";
-	  }
-    	  std::cout << "\n";
-	}
-
-    	  std::cout << "\n";
-    	  std::cout << "\n";
-    	  std::cout << "\n";
-    	for(int i = 0; i < 3; i++){
-    	  for(int j = 0; j < size; j++){
-    	    std::cout << dijkstra[size*i + j] << " ";
-	  }
-    	  std::cout << "\n";
-	}
-    };
-
+    
     // Accessing components of the matrix
     int findIndex(int first, int second){
     	return first*size+second;
@@ -58,9 +34,9 @@ class Graph{
 
     void clean() {
     	for(int i = 0; i < size; i++){
-	  dijkstra[size*0 + i] = -1;
+	  dijkstra[size*0 + i] = 0;
 	  dijkstra[size*1 + i] = MAX_DISTANCE;
-	  dijkstra[size*2 + i] = 0;
+	  dijkstra[size*2 + i] = -1;
 	}
     }
 
@@ -73,12 +49,11 @@ class Graph{
     	addEdge(first, second, -1);
     };
 
-    // Checks both ways
+    // Checks from node to see what its connected to
     std::vector<int> neighborsOfVertex(int node){
 	std::vector<int> neighbors = {};
     	for(int i = 0; i < size; i++){
-	  int* indices = new int[findIndex(node, i), findIndex(i, node)];
-	  if(matrix[indices[0]] > 0 or matrix[indices[1]] > 0){
+	  if(matrix[findIndex(node,i)] > 0){
 	    neighbors.push_back(i);
 	  }
 	}
@@ -90,29 +65,41 @@ class Graph{
 	return matrix[findIndex(first,second)] >= 0;
     };
 
-    std::vector<int> shortestPathFromVertex(int from, 
-    					    int to, 
-    					    int travel = 0, 
-					    int previous = -1){
-    	if (previous == -1){
-	  clean();
-	}
-    	if (dijkstra[size + from] < travel){
-	  dijkstra[size + from] = travel;
-	  dijkstra[from] = previous;
-	}
+    std::vector<int> shortestPathFromVertex(int from, int to){
 
-	for(int i = 0; i < size; i++){
-	  if (dijkstra[i] == 0 and verticesAreAdjacent(from, i)){
-	    shortestPathFromVertex(i, to, travel + matrix[findIndex(from, i)], from);
+
+        clean();
+	dijkstra[size + from] = 0;
+	int current = from;
+	while(true){
+	  for(int neighbor : neighborsOfVertex(current)){
+	    if(not dijkstra[neighbor]){
+	      if(dijkstra[size + current] + matrix[findIndex(current,neighbor)] < dijkstra[size + neighbor]){
+		dijkstra[size + neighbor] = dijkstra[size + current] + matrix[findIndex(current,neighbor)];
+		dijkstra[size * 2 + neighbor] = current;
+	      }
+	    }
+	  dijkstra[current] = 1;
 	  }
+	  int capture = current;
+	  for(int i = 0; i < size; i++){
+	    if(not dijkstra[i] and i != to){
+	      capture = i;
+	      break;
+	    }
+	  }
+	  if(capture != current){
+	    current = capture;
+	    continue;
+	  }
+	  break;
 	}
 	std::vector<int> content = {};
-	int current = to;
+	int view = to;
 	int count = 0;
-	while(current != -1 or count >= size){
-	  content.push_back(current);
-	  current = dijkstra[size*2 + current];
+	while(view != -1 and count <= size){
+	  content.insert(content.begin(), { view });
+	  view = dijkstra[size*2 + view];
 	  count++;
 	}
     	return content;
