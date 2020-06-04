@@ -24,7 +24,15 @@ class Queue{
   };
 
   T dequeue(){
-    return content->pop();
+    if(content->getNext() == nullptr){
+      T value = content->getValue();
+      delete content;
+      content = nullptr;
+      return value;
+    }
+    else{
+      return content->pop();
+    }
   };
 
   int size() const{
@@ -41,7 +49,7 @@ class Queue{
       return;
     } 
     else{
-      for(int i = 0; i < size(); i++){
+      for(int i = 0; i < size() + 1; i++){
         content->pop();
       }
       Node<T>* old = content;
