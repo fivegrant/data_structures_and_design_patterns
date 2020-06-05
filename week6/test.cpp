@@ -15,12 +15,14 @@ TEST_CASE("Initialize RB Trees"){
 TEST_CASE("Search RB Tree"){
    std::vector<int> content = std::vector<int>{ 3, 10, 8 };
    std::vector<int> correct = std::vector<int> {1, 3, 8, 10};
-   std::vector<int> breadth = std::vector<int> {3, 1, 10, 8};
+   std::vector<int> breadth = std::vector<int> {3, 1, 8, 10};
    RedBlackTree<int> tree = RedBlackTree<int>(content);
-   REQUIRE(tree.getHeight() == tree.getSize());
+   REQUIRE(tree.getHeight() == 2);
    REQUIRE(tree.isBalanced());
    REQUIRE(not tree.isEmpty());
-   REQUIRE(tree.contains(3));
+   REQUIRE(tree.contains(8));
+   REQUIRE(tree.makeBreadthFirstVector() == std::vector<int> {8, 3, 10});
+   REQUIRE(tree.right->black);
    tree.insert(1);
    REQUIRE(tree.elementVector() == correct);
    REQUIRE(tree.makeBreadthFirstVector() == breadth);
